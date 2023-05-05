@@ -2,7 +2,10 @@
  
  /*SQUIRT SQL DE LA CREACION DE LA BASE DE DATOS */
 
-CREATE DATABASE sistema_autoevaluacion CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE sistema_autoevaluacion;
+
+USE sistema_autoevaluacion;
 
 CREATE TABLE Asignaturas (
   id_asignatura INT AUTO_INCREMENT,
@@ -12,8 +15,6 @@ CREATE TABLE Asignaturas (
   FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
 );
 
--- La tabla Asignaturas contiene información sobre cada asignatura, como su nombre y el profesor que la imparte.
-
 CREATE TABLE Temas (
   id_tema INT AUTO_INCREMENT,
   nombre VARCHAR(50) NOT NULL,
@@ -21,8 +22,6 @@ CREATE TABLE Temas (
   PRIMARY KEY (id_tema),
   FOREIGN KEY (id_asignatura) REFERENCES Asignaturas(id_asignatura)
 );
-
--- La tabla Temas contiene información sobre los temas de cada asignatura, como su nombre y la asignatura a la que pertenecen.
 
 CREATE TABLE Ejercicios (
   id_ejercicio INT AUTO_INCREMENT,
@@ -32,8 +31,6 @@ CREATE TABLE Ejercicios (
   PRIMARY KEY (id_ejercicio)
 );
 
--- La tabla Ejercicios contiene información sobre cada ejercicio, como su enunciado, solución y grado de dificultad.
-
 CREATE TABLE Ejercicios_Temas (
   id_ejercicio INT NOT NULL,
   id_tema INT NOT NULL,
@@ -41,8 +38,6 @@ CREATE TABLE Ejercicios_Temas (
   FOREIGN KEY (id_ejercicio) REFERENCES Ejercicios(id_ejercicio),
   FOREIGN KEY (id_tema) REFERENCES Temas(id_tema)
 );
-
--- La tabla Ejercicios_Temas se utiliza para relacionar los ejercicios con los temas de la asignatura a los que pertenecen.
 
 CREATE TABLE HojasProblemas (
   id_hoja INT AUTO_INCREMENT,
@@ -54,8 +49,6 @@ CREATE TABLE HojasProblemas (
   FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
 );
 
--- La tabla HojasProblemas contiene información sobre las hojas de problemas que los profesores pueden generar para que los alumnos las resuelvan.
-
 CREATE TABLE Ejercicios_HojasProblemas (
   id_ejercicio INT NOT NULL,
   id_hoja INT NOT NULL,
@@ -63,8 +56,6 @@ CREATE TABLE Ejercicios_HojasProblemas (
   FOREIGN KEY (id_ejercicio) REFERENCES Ejercicios(id_ejercicio),
   FOREIGN KEY (id_hoja) REFERENCES HojasProblemas(id_hoja)
 );
-
--- La tabla Ejercicios_HojasProblemas se utiliza para relacionar los ejercicios que aparecen en una hoja de problemas determinada.
 
 CREATE TABLE Examenes (
   id_examen INT AUTO_INCREMENT,
@@ -76,8 +67,6 @@ CREATE TABLE Examenes (
   PRIMARY KEY (id_examen),
   FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
 );
-
--- La tabla Examenes contiene información sobre los exámenes que pueden
 
 
 /* ------------------------ FIN DE LA SOLUCION PUNTO 4 MODELAR UN SISTEMA DE EVALUACION ---------------------*/
