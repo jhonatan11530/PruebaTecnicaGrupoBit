@@ -1,85 +1,81 @@
 /* ------------------------ INICIO DE LA SOLUCION PUNTO 4 MODELAR UN SISTEMA DE EVALUACION ---------------------*/
  
  /*SQUIRT SQL DE LA CREACION DE LA BASE DE DATOS */
--- Crear la tabla de asignaturas
-CREATE TABLE asignaturas (
-  id_asignatura INT PRIMARY KEY,
+
+CREATE TABLE Asignaturas (
+  id_asignatura INT AUTO_INCREMENT,
   nombre VARCHAR(50) NOT NULL,
-  profesor VARCHAR(50) NOT NULL
+  id_profesor INT NOT NULL,
+  PRIMARY KEY (id_asignatura),
+  FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
 );
 
--- Crear la tabla de temas
-CREATE TABLE temas (
-  id_tema INT PRIMARY KEY,
+-- La tabla Asignaturas contiene información sobre cada asignatura, como su nombre y el profesor que la imparte.
+
+CREATE TABLE Temas (
+  id_tema INT AUTO_INCREMENT,
   nombre VARCHAR(50) NOT NULL,
-  id_asignatura INT,
-  FOREIGN KEY (id_asignatura) REFERENCES asignaturas(id_asignatura)
+  id_asignatura INT NOT NULL,
+  PRIMARY KEY (id_tema),
+  FOREIGN KEY (id_asignatura) REFERENCES Asignaturas(id_asignatura)
 );
 
--- Crear la tabla de ejercicios
-CREATE TABLE ejercicios (
-  id_ejercicio INT PRIMARY KEY,
+-- La tabla Temas contiene información sobre los temas de cada asignatura, como su nombre y la asignatura a la que pertenecen.
+
+CREATE TABLE Ejercicios (
+  id_ejercicio INT AUTO_INCREMENT,
   enunciado TEXT NOT NULL,
   solucion TEXT NOT NULL,
-  dificultad VARCHAR(20) NOT NULL,
-  fecha_creacion DATE NOT NULL,
-  id_tema INT,
-  FOREIGN KEY (id_tema) REFERENCES temas(id_tema)
+  grado_dificultad ENUM('facil', 'media', 'dificil', 'muy dificil') NOT NULL,
+  PRIMARY KEY (id_ejercicio)
 );
 
--- Crear la tabla de examenes
-CREATE TABLE examenes (
-  id_examen INT PRIMARY KEY,
-  fecha DATE NOT NULL,
-  tipo VARCHAR(10) NOT NULL,
-  id_asignatura INT,
-  FOREIGN KEY (id_asignatura) REFERENCES asignaturas(id_asignatura)
+-- La tabla Ejercicios contiene información sobre cada ejercicio, como su enunciado, solución y grado de dificultad.
+
+CREATE TABLE Ejercicios_Temas (
+  id_ejercicio INT NOT NULL,
+  id_tema INT NOT NULL,
+  PRIMARY KEY (id_ejercicio, id_tema),
+  FOREIGN KEY (id_ejercicio) REFERENCES Ejercicios(id_ejercicio),
+  FOREIGN KEY (id_tema) REFERENCES Temas(id_tema)
 );
 
--- Crear la tabla de ejercicios de examen
-CREATE TABLE ejercicios_examen (
-  id_ejercicio INT,
-  id_examen INT,
-  porcentaje FLOAT NOT NULL,
-  FOREIGN KEY (id_ejercicio) REFERENCES ejercicios(id_ejercicio),
-  FOREIGN KEY (id_examen) REFERENCES examenes(id_examen)
-);
+-- La tabla Ejercicios_Temas se utiliza para relacionar los ejercicios con los temas de la asignatura a los que pertenecen.
 
--- Crear la tabla de calificaciones de examenes
-CREATE TABLE calificaciones_examen (
-  id_examen INT,
-  id_alumno INT,
-  calificacion FLOAT NOT NULL,
-  FOREIGN KEY (id_examen) REFERENCES examenes(id_examen),
-  FOREIGN KEY (id_alumno) REFERENCES alumnos(id_alumno)
-);
-
--- Crear la tabla de hojas de problemas
-CREATE TABLE hojas_problemas (
-  id_hoja INT PRIMARY KEY,
+CREATE TABLE HojasProblemas (
+  id_hoja INT AUTO_INCREMENT,
+  titulo VARCHAR(50) NOT NULL,
   fecha_publicacion DATE NOT NULL,
-  fecha_limite DATE NOT NULL,
-  id_asignatura INT,
-  FOREIGN KEY (id_asignatura) REFERENCES asignaturas(id_asignatura)
+  fecha_entrega DATE NOT NULL,
+  id_profesor INT NOT NULL,
+  PRIMARY KEY (id_hoja),
+  FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
 );
 
--- Crear la tabla de ejercicios de hojas de problemas
-CREATE TABLE ejercicios_hoja (
-  id_ejercicio INT,
-  id_hoja INT,
-  FOREIGN KEY (id_ejercicio) REFERENCES ejercicios(id_ejercicio),
-  FOREIGN KEY (id_hoja) REFERENCES hojas_problemas(id_hoja)
+-- La tabla HojasProblemas contiene información sobre las hojas de problemas que los profesores pueden generar para que los alumnos las resuelvan.
+
+CREATE TABLE Ejercicios_HojasProblemas (
+  id_ejercicio INT NOT NULL,
+  id_hoja INT NOT NULL,
+  PRIMARY KEY (id_ejercicio, id_hoja),
+  FOREIGN KEY (id_ejercicio) REFERENCES Ejercicios(id_ejercicio),
+  FOREIGN KEY (id_hoja) REFERENCES HojasProblemas(id_hoja)
 );
 
--- Crear la tabla de resolución de ejercicios
-CREATE TABLE resolucion_ejercicios (
-  id_alumno INT,
-  id_ejercicio INT,
-  tiempo_resolucion INT,
-  calificacion FLOAT NOT NULL,
-  FOREIGN KEY (id_alumno) REFERENCES alumnos(id_alumno),
-  FOREIGN KEY (id_ejercicio) REFERENCES ejercicios(id_ejercicio)
+-- La tabla Ejercicios_HojasProblemas se utiliza para relacionar los ejercicios que aparecen en una hoja de problemas determinada.
+
+CREATE TABLE Examenes (
+  id_examen INT AUTO_INCREMENT,
+  titulo VARCHAR(50) NOT NULL,
+  fecha DATE NOT NULL,
+  tipo ENUM('final', 'parcial') NOT NULL,
+  porcentaje_ejercicios FLOAT NOT NULL,
+  id_profesor INT NOT NULL,
+  PRIMARY KEY (id_examen),
+  FOREIGN KEY (id_profesor) REFERENCES Profesores(id_profesor)
 );
+
+-- La tabla Examenes contiene información sobre los exámenes que pueden
 
 
 /* ------------------------ FIN DE LA SOLUCION PUNTO 4 MODELAR UN SISTEMA DE EVALUACION ---------------------*/
