@@ -2,6 +2,8 @@
  
  /*SQUIRT SQL DE LA CREACION DE LA BASE DE DATOS */
 
+CREATE DATABASE sistema_autoevaluacion CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 CREATE TABLE Asignaturas (
   id_asignatura INT AUTO_INCREMENT,
   nombre VARCHAR(50) NOT NULL,
